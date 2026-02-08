@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Blox</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body{
+  font-family:Arial;
+  background:#111;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.box{
+  background:#1e1e1e;
+  padding:20px;
+  border-radius:10px;
+  text-align:center;
+  width:300px;
+}
+input,button,select{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:6px;
+}
+button{background:#00a2ff;color:white;}
+select{background:#333;color:white;}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2 id="title">Google Blox</h2>
+
+<select id="lang" onchange="setLang()">
+  <option value="ar">العربية</option>
+  <option value="en">English</option>
+</select>
+
+<input id="id" placeholder="رقم اللعبة">
+<button onclick="go()" id="btn">فتح اللعبة</button>
+</div>
+
+<script>
+let lang = localStorage.getItem("lang") || "ar";
+document.getElementById("lang").value = lang;
+
+const text = {
+ar:{
+    title:"Google Blox",
+    placeholder:"رقم اللعبة",
+    btn:"فتح اللعبة",
+    error:"رقم غير صحيح"
+},
+en:{
+    title:"Google Blox",
+    placeholder:"Game ID",
+    btn:"Open Game",
+    error:"Invalid ID"
+}
+};
+
+function apply(){
+  document.documentElement.lang = lang;
+  document.body.dir = lang==="ar"?"rtl":"ltr";
+  document.getElementById("title").innerText = text[lang].title;
+  document.getElementById("id").placeholder = text[lang].placeholder;
+  document.getElementById("btn").innerText = text[lang].btn;
+}
+apply();
+
+function setLang(){
+  lang = document.getElementById("lang").value;
+  localStorage.setItem("lang",lang);
+  apply();
+}
+
+function go(){
+  const id=document.getElementById("id").value;
+  if(!/^[0-9]{5,}$/.test(id)) return alert(text[lang].error);
+  location.href="https://www.roblox.com/games/"+id;
+}
+
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>
